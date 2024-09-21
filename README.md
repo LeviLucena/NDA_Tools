@@ -1,5 +1,3 @@
-<p align="center"> <a href="https://www.python.org/"> <img src="https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python Badge" /> </a> <a href="https://flask.palletsprojects.com/en/2.3.x/"> <img src="https://img.shields.io/badge/-Flask-000000?style=flat-square&logo=flask&logoColor=white" alt="Flask Badge" /> </a> <a href="https://openai.com/"> <img src="https://img.shields.io/badge/-OpenAI-000000?style=flat-square&logo=openai&logoColor=white" alt="OpenAI Badge" /> </a> <a href="https://getbootstrap.com/"> <img src="https://img.shields.io/badge/-Bootstrap-563D7C?style=flat-square&logo=bootstrap&logoColor=white" alt="Bootstrap Badge" /> </a> <a href="https://python-docx.readthedocs.io/en/latest/"> <img src="https://img.shields.io/badge/-python--docx-3776AB?style=flat-square&logo=python&logoColor=white" alt="python-docx Badge" /> </a> </p>
-
 # NDA Comparison Tools
 
 ## Descrição
