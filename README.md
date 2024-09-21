@@ -2,7 +2,7 @@
 
 ## Descrição
 
-O **NDA Comparison Tools** é uma aplicação web construída em Flask que compara dois arquivos de Contratos de Não Divulgações (NDAs) e gera um novo documento com as diferenças realçadas. Usando a API da OpenAI, a aplicação analisa as discrepâncias entre um NDA padrão e o NDA de um cliente, realçando modificações em amarelo e listando as inconsistências.
+O **NDA Comparison Tools** é uma aplicação web construída em Flask que compara dois arquivos de Contratos de NDAs (é a sigla em inglês para Non-Disclosure Agreements, ou Acordos de Confidencialidade) e gera um novo documento com as diferenças realçadas. Usando a API da OpenAI, a aplicação analisa as discrepâncias entre um NDA padrão e o NDA de um cliente, realçando modificações em amarelo e listando as inconsistências.
 
 ![image](https://github.com/user-attachments/assets/f953c2f6-65f6-4045-b610-a4fd41260264)
 
