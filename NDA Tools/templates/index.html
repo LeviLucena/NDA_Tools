@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NDA Comparison Tool</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/openai@3.0.0/dist/index.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/diff/5.0.0/diff.min.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding-top: 50px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 20px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        .file-input {
+            margin-bottom: 20px;
+        }
+
+        #comparison-result {
+            white-space: pre-wrap;
+            background-color: #f7f7f7;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .highlight {
+            background-color: #fff176;
+        }
+
+        #download-btn {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background-color: #3498db;
+            border-color: #3498db;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+        }
+
+        .file-input-wrapper .btn-file-input {
+            display: block;
+            width: 100%;
+        }
+
+        .file-name {
+            margin-top: 5px;
+            display: block;
+            font-size: 12px;
+            color: #777;
+        }
+
+        .btn-file-input {
+            text-align: left;
+            padding: 10px 15px;
+        }
+
+        .btn-file-input i {
+            margin-right: 10px;
+        }
+
+        .action-buttons {
+            margin-top: 30px;
+        }
+
+        #loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="text-center"><i class="fas fa-file-contract"></i> NDA Comparison Tool</h1>
+
+        <form method="POST" enctype="multipart/form-data" action="/compare" onsubmit="showLoading()">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="file-input">
+                        <label for="standard-nda">Upload Standard NDA:</label>
+                        <div class="file-input-wrapper">
+                            <button type="button" class="btn btn-default btn-file-input">
+                                <i class="fas fa-upload"></i> Choose Standard NDA file
+                            </button>
+                            <input type="file" id="standard-nda" name="standard_nda" accept=".pdf,.docx,.txt"
+                                onchange="updateFileName('standard-nda', 'standard-nda-name')">
+                        </div>
+                        <span id="standard-nda-name" class="file-name"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="file-input">
+                        <label for="user-nda">Upload Your NDA:</label>
+                        <div class="file-input-wrapper">
+                            <button type="button" class="btn btn-default btn-file-input">
+                                <i class="fas fa-upload"></i> Choose Your NDA file
+                            </button>
+                            <input type="file" id="user-nda" name="user_nda" accept=".pdf,.docx,.txt"
+                                onchange="updateFileName('user-nda', 'user-nda-name')">
+                        </div>
+                        <span id="user-nda-name" class="file-name"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row action-buttons">
+                <div class="col-md-6 col-md-offset-3">
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">
+                        <i class="fas fa-sync-alt"></i> Compare NDAs
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <div id="loading">
+            <i class="fas fa-spinner fa-spin fa-3x"></i>
+            <p>Analyzing NDAs...</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="row">
+            <div class="col-md-12">
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <script>
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.querySelector('form');
+
+            // Interceptando o envio do formulário
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();  // Previne o envio padrão do formulário
+                showLoading();  // Mostra o carregamento
+
+                const formData = new FormData(form);  // Cria os dados do formulário
+
+                fetch('/compare', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.blob())  // Recebe o arquivo como blob
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.style.display = 'none';
+                        a.href = url;
+                        a.download = 'nda_ajustado.docx';  // Nome do arquivo baixado
+                        document.body.appendChild(a);
+                        a.click();  // Força o download
+                        window.URL.revokeObjectURL(url);
+
+                        hideLoading();  // Oculta o carregamento
+                    })
+                    .catch(error => {
+                        console.error('Erro durante a comparação:', error);
+                        hideLoading();  // Mesmo em caso de erro, oculta o carregamento
+                    });
+            });
+        });
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        function updateFileName(inputId, nameId) {
+            const input = document.getElementById(inputId);
+            const name = document.getElementById(nameId);
+            name.textContent = input.files[0] ? input.files[0].name : '';
+        }
+    </script>
+</body>
+
+</html>
