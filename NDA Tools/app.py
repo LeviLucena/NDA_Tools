@@ -9,6 +9,8 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH  # Alinhamento justificado do docx
 from docx.shared import Inches  # Para definir o tamanho da imagem
 from docx.shared import Pt
 
+# Desenvolvido por Levi Lucena - linkedin.com/in/levilucena
+
 app = Flask(__name__)
 
 # Configurações do diretório de upload
