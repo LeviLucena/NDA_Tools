@@ -2,6 +2,7 @@ import os
 from flask import Flask, render_template, request, redirect, url_for, send_file, flash
 from werkzeug.utils import secure_filename
 import openai
+import time
 import docx
 from io import BytesIO
 from docx.enum.text import WD_COLOR_INDEX  # Importando o WD_COLOR_INDEX corretamente
@@ -183,7 +184,24 @@ def compare_ndas():
 
     return send_file(doc_io, as_attachment=True, download_name='nda_ajustado.docx')
 
+# Função para limpar arquivos antigos da pasta de uploads
+def clean_old_files(upload_folder, days=1):
+    # Calcula o tempo limite em segundos
+    time_limit = time.time() - (days * 86400)  # 86400 segundos em um dia
+
+    for filename in os.listdir(upload_folder):
+        file_path = os.path.join(upload_folder, filename)
+        # Verifica se o caminho é um arquivo e se foi modificado há mais de 'days' dias
+        if os.path.isfile(file_path):
+            file_mod_time = os.path.getmtime(file_path)
+            if file_mod_time < time_limit:
+                os.remove(file_path)
+                print(f"Arquivo removido: {file_path}")
+
 if __name__ == '__main__':
     if not os.path.exists(UPLOAD_FOLDER):
         os.makedirs(UPLOAD_FOLDER)
+
+    # Limpar arquivos antigos antes de iniciar o servidor
+    clean_old_files(app.config['UPLOAD_FOLDER'], days=1)
     app.run(debug=True)
