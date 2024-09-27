@@ -71,7 +71,7 @@ flask run
 .NDA Tools
 ├── app.py                # Arquivo principal do Flask
 ├── templates/
-│   └── index6.html       # Template HTML para a interface de upload
+│   └── index.html       # Template HTML para a interface de upload
 ├── uploads/              # Diretório para armazenar os arquivos enviados
 ├── static/
 │   └── images/
