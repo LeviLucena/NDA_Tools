@@ -1,3 +1,12 @@
+![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-Web_Framework-000000?style=for-the-badge&logo=flask&logoColor=white)
+![OpenAI API](https://img.shields.io/badge/OpenAI-API_Integration-412991?style=for-the-badge&logo=openai&logoColor=white)
+![python-docx](https://img.shields.io/badge/python--docx-DOCX_Processing-2B579A?style=for-the-badge)
+![Werkzeug](https://img.shields.io/badge/Werkzeug-WSGI_Toolkit-FF6F00?style=for-the-badge)
+![WTForms](https://img.shields.io/badge/WTForms-Form_Validation-009688?style=for-the-badge)
+![HTML5](https://img.shields.io/badge/HTML5-Markup-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-Styling-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-UI_Framework-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
 # NDA Comparison Tools
 
 ## Descrição
